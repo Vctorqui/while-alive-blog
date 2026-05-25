@@ -2,6 +2,7 @@
 
 import type { MicroPost } from "@/src/types/story";
 import { useTheme } from "@/src/components/theme-provider";
+import { LikeButton } from "@/src/components/stories/like-button";
 
 interface MicroPostCardProps {
   post: MicroPost;
@@ -79,14 +80,17 @@ export function MicroPostCard({ post }: MicroPostCardProps) {
         </div>
 
         {/* Footer */}
-        <footer className={`flex items-center gap-4 text-xs text-muted-foreground/70 ${
+        <footer className={`flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground/70 ${
           experience === "terminal" ? "font-mono" : "font-serif italic"
         }`}>
-          <span className={experience === "terminal" ? "" : "not-italic"}>{post.author}</span>
-          <span className="text-muted-foreground/30">·</span>
-          <time dateTime={post.createdAt.toISOString()} className={experience === "terminal" ? "" : "font-sans not-italic text-[11px] uppercase tracking-wider text-muted-foreground/60"}>
-            {formattedDate}
-          </time>
+          <div className="flex items-center gap-4">
+            <span className={experience === "terminal" ? "" : "not-italic"}>{post.author}</span>
+            <span className="text-muted-foreground/30">·</span>
+            <time dateTime={post.createdAt.toISOString()} className={experience === "terminal" ? "" : "font-sans not-italic text-[11px] uppercase tracking-wider text-muted-foreground/60"}>
+              {formattedDate}
+            </time>
+          </div>
+          <LikeButton postId={post.id} initialCount={post.likeCount} />
         </footer>
       </div>
     </article>

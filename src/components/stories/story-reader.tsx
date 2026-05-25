@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Story } from "@/src/types/story";
 import { useTheme } from "@/src/components/theme-provider";
+import { LikeButton } from "@/src/components/stories/like-button";
 
 interface StoryReaderProps {
   story: Story;
@@ -61,9 +62,13 @@ export function StoryReader({ story }: StoryReaderProps) {
 
       {/* Story content */}
       <div className="prose-story font-serif text-foreground/90 max-w-none">
-        {story.content.split("\n\n").map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+        {story.content.split("\n\n").map((paragraph) => (
+          <p key={`${story.id}-${paragraph.slice(0, 32)}`}>{paragraph}</p>
         ))}
+      </div>
+
+      <div className="mt-10">
+        <LikeButton postId={story.id} initialCount={story.likeCount} />
       </div>
 
       {/* End marker */}

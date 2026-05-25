@@ -9,7 +9,7 @@ export function Header() {
 
   return (
     <header className="border-b border-border transition-colors duration-300">
-      <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between">
+      <div className="max-w-4xl mx-auto p-6 flex items-center justify-between">
         {experience === "terminal" ? (
           <Link
             href="/"
@@ -51,6 +51,7 @@ export function Header() {
 
           {experience === "terminal" ? (
             <button
+            type="button"
               onClick={toggleTheme}
               className="font-mono text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
@@ -60,6 +61,7 @@ export function Header() {
             </button>
           ) : (
             <button
+              type="button"
               onClick={toggleTheme}
               className="font-sans text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
@@ -70,20 +72,22 @@ export function Header() {
 
           {experience === "terminal" ? (
             <button
+              type="button"
               onClick={toggleExperience}
               className="flex items-center gap-1 font-mono text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               aria-label="Cambiar a modo cuaderno"
             >
-              <Notebook className="h-3.5 w-3.5 inline text-muted-foreground" />
+              <Notebook className="size-3.5 inline text-muted-foreground" />
               <span className="ml-0.5">Modo Cuaderno</span>
             </button>
           ) : (
             <button
+              type="button"
               onClick={toggleExperience}
               className="flex items-center gap-1 font-sans text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               aria-label="Cambiar a modo terminal"
             >
-              <Terminal className="h-3.5 w-3.5 inline text-muted-foreground" />
+              <Terminal className="size-3.5 inline text-muted-foreground" />
               <span className="ml-1">Modo Terminal</span>
             </button>
           )}

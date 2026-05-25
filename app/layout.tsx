@@ -60,7 +60,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geist.variable} ${geistMono.variable} ${lora.variable} bg-background`}
+      className={`${geist.variable} ${geistMono.variable} ${lora.variable} bg-background dark`}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased min-h-screen">

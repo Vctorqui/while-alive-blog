@@ -6,6 +6,7 @@ export interface BasePost {
   type: PostType;
   author: string;
   createdAt: Date;
+  likeCount?: number;
 }
 
 export interface Story extends BasePost {

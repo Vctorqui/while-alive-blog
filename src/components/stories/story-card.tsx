@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Story } from "@/src/types/story";
 import { useTheme } from "@/src/components/theme-provider";
+import { LikeButton } from "@/src/components/stories/like-button";
 
 interface StoryCardProps {
   story: Story;
@@ -47,6 +48,9 @@ export function StoryCard({ story }: StoryCardProps) {
           </footer>
         </div>
       </Link>
+      <div className="mt-3">
+        <LikeButton postId={story.id} initialCount={story.likeCount} />
+      </div>
     </article>
   );
 }

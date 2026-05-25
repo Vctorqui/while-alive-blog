@@ -2,8 +2,9 @@
 
 import {
   createContext,
-  useContext,
-  useEffect,
+  use,
+  useCallback,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -20,71 +21,73 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+function applyThemeToDom(theme: Theme) {
+  document.documentElement.classList.toggle("dark", theme === "dark");
+}
+
+function applyExperienceToDom(experience: Experience) {
+  document.documentElement.setAttribute("data-experience", experience);
+}
+
+function readInitialTheme(): Theme {
+  if (typeof window === "undefined") return "dark";
+  const savedTheme = localStorage.getItem("theme") as Theme | null;
+  return savedTheme ?? "dark";
+}
+
+function readInitialExperience(): Experience {
+  if (typeof window === "undefined") return "notebook";
+  const savedExperience = localStorage.getItem("experience") as Experience | null;
+  return savedExperience ?? "notebook";
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [experience, setExperience] = useState<Experience>("notebook");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      setTheme("dark");
+  const [theme, setTheme] = useState<Theme>(() => {
+    const initial = readInitialTheme();
+    if (typeof window !== "undefined") {
+      applyThemeToDom(initial);
     }
+    return initial;
+  });
 
-    const savedExperience = localStorage.getItem("experience") as Experience | null;
-    if (savedExperience) {
-      setExperience(savedExperience);
+  const [experience, setExperience] = useState<Experience>(() => {
+    const initial = readInitialExperience();
+    if (typeof window !== "undefined") {
+      applyExperienceToDom(initial);
     }
+    return initial;
+  });
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next: Theme = prev === "dark" ? "light" : "dark";
+      applyThemeToDom(next);
+      localStorage.setItem("theme", next);
+      return next;
+    });
   }, []);
 
-  useEffect(() => {
-    if (mounted) {
-      const root = document.documentElement;
-      if (theme === "dark") {
-        root.classList.add("dark");
-      } else {
-        root.classList.remove("dark");
-      }
-      localStorage.setItem("theme", theme);
-    }
-  }, [theme, mounted]);
+  const toggleExperience = useCallback(() => {
+    setExperience((prev) => {
+      const next: Experience = prev === "terminal" ? "notebook" : "terminal";
+      applyExperienceToDom(next);
+      localStorage.setItem("experience", next);
+      return next;
+    });
+  }, []);
 
-  useEffect(() => {
-    if (mounted) {
-      const root = document.documentElement;
-      root.setAttribute("data-experience", experience);
-      localStorage.setItem("experience", experience);
-    }
-  }, [experience, mounted]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
-  const toggleExperience = () => {
-    setExperience((prev) => (prev === "terminal" ? "notebook" : "terminal"));
-  };
-
-  if (!mounted) {
-    return (
-      <ThemeContext.Provider value={{ theme: "light", toggleTheme, experience: "notebook", toggleExperience }}>
-        {children}
-      </ThemeContext.Provider>
-    );
-  }
+  const value = useMemo(
+    () => ({ theme, toggleTheme, experience, toggleExperience }),
+    [theme, experience, toggleTheme, toggleExperience],
+  );
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, experience, toggleExperience }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext);
+  const context = use(ThemeContext);
   if (context === undefined) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }

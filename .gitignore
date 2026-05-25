@@ -2,8 +2,15 @@
 
 # Environment variables
 .env*.local
+.env
 
 # Common ignores
 node_modules
 .next/
 .DS_Store
+.antigravity
+.agents/
+.claude/
+.react-doctor/
+.kiro/
+.cursor/

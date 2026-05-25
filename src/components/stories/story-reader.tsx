@@ -61,8 +61,8 @@ export function StoryReader({ story }: StoryReaderProps) {
 
       {/* Story content */}
       <div className="prose-story font-serif text-foreground/90 max-w-none">
-        {story.content.split("\n\n").map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+        {story.content.split("\n\n").map((paragraph) => (
+          <p key={`${story.id}-${paragraph.slice(0, 32)}`}>{paragraph}</p>
         ))}
       </div>
 

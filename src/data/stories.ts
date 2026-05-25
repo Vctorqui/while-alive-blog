@@ -1,18 +1,12 @@
 import type { Story, MicroPost, Post, PostType, FilterType } from "@/src/types/story";
+import { slugify as createSlug } from "@/src/lib/slug";
 
 export function calculateReadingTime(content: string): number {
   const words = content.trim().split(/\s+/).length;
   return Math.max(1, Math.ceil(words / 200));
 }
 
-export function createSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9áéíóúñü\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .trim();
-}
+export { slugify as createSlug } from "@/src/lib/slug";
 
 export function createExcerpt(content: string, maxLength: number = 120): string {
   const plainText = content.replace(/\n+/g, " ").trim();

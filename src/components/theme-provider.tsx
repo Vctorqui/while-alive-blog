@@ -30,12 +30,9 @@ function applyExperienceToDom(experience: Experience) {
 }
 
 function readInitialTheme(): Theme {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "dark";
   const savedTheme = localStorage.getItem("theme") as Theme | null;
-  if (savedTheme) return savedTheme;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  return savedTheme ?? "dark";
 }
 
 function readInitialExperience(): Experience {

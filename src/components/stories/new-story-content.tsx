@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { StoryForm } from "@/src/components/stories/story-form";
 import { useTheme } from "@/src/components/theme-provider";
 
 export function NewStoryContent() {
   const { experience } = useTheme();
+  const searchParams = useSearchParams();
+  const submitted = searchParams.get("enviado") === "1";
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 md:py-20">
@@ -34,10 +37,20 @@ export function NewStoryContent() {
         </h1>
 
         <p className="font-serif text-muted-foreground text-base leading-relaxed">
-          Comparte tu cuento con el mundo. Sin registro, sin perfiles. Solo tú y
-          tus palabras.
+          Comparte tu cuento o pensamiento. Los envíos pasan por revisión antes
+          de publicarse en el índice.
         </p>
       </header>
+
+      {submitted && (
+        <div
+          className={`mb-8 text-sm p-4 rounded border border-border bg-muted/30 ${
+            experience === "terminal" ? "font-mono" : "font-serif"
+          }`}
+        >
+          Recibimos tu envío. Está pendiente de aprobación por el equipo.
+        </div>
+      )}
 
       <StoryForm />
 

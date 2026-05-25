@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
-import { getStoryBySlug, getAllStories } from "@/src/data/stories";
+import { fetchPublishedStoryBySlug } from "@/src/lib/posts/repository";
 import { StoryReader } from "@/src/components/stories/story-reader";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 
 interface StoryPageProps {
   params: Promise<{
@@ -11,7 +13,7 @@ interface StoryPageProps {
 
 export async function generateMetadata({ params }: StoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const story = getStoryBySlug(slug);
+  const story = await fetchPublishedStoryBySlug(slug);
 
   if (!story) {
     return {
@@ -33,16 +35,9 @@ export async function generateMetadata({ params }: StoryPageProps): Promise<Meta
   };
 }
 
-export function generateStaticParams() {
-  const stories = getAllStories();
-  return stories.map((story) => ({
-    slug: story.slug,
-  }));
-}
-
 export default async function StoryPage({ params }: StoryPageProps) {
   const { slug } = await params;
-  const story = getStoryBySlug(slug);
+  const story = await fetchPublishedStoryBySlug(slug);
 
   if (!story) {
     notFound();

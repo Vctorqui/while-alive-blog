@@ -28,8 +28,8 @@ export function StoryForm() {
         
         if (result.error) {
           setError(result.error);
-        } else if (result.slug) {
-          router.push(`/cuento/${result.slug}`);
+        } else if (result.success) {
+          router.push("/nuevo?enviado=1");
         }
       } else {
         formData.set("type", microType);
@@ -40,7 +40,7 @@ export function StoryForm() {
         if (result.error) {
           setError(result.error);
         } else if (result.success) {
-          router.push("/");
+          router.push("/nuevo?enviado=1");
         }
       }
     });
